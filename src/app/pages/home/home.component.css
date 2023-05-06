@@ -1,0 +1,10 @@
+span {
+  float: right;
+}
+
+.item {
+  cursor: pointer;
+}
+.itemI:hover {
+  box-shadow: #ccc 6px 4px 7px;
+}

@@ -1,0 +1,253 @@
+<div class="content-wrapper">
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Calcul indemnités de licenciement</h1>
+        </div>
+        <div class="col-sm-6 hidden-print">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a routerLink="/">Acceuil</a></li>
+            <li class="breadcrumb-item active">Indemnités de licenciement</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Enseignement privé</h3>
+            </div>
+            <ul class="nav nav-pills p-2 hidden-print">
+              <li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Simplifiée</a></li>
+              <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Détaillée</a></li>
+            </ul>
+            <div class="card-body">
+              <div class="tab-content">
+                <div class="tab-pane active" id="tab_1">
+                  <form [formGroup]="privateEnseignementForm">
+                    <div class="card-body">
+                      <div class="row">
+                        <ngb-alert [dismissible]="true" *ngIf="showMessage">
+                          <strong>Attention!</strong> {{ message }}
+                        </ngb-alert>
+                        <div class="col-12">
+                          <label ngbPopover="Texte descriptif">SGMM<b class="text-danger"> *</b></label>
+                          <input type="number" formControlName="sgmm" min="0" class="form-control">
+                        </div>
+                      </div>
+                      <br>
+                      <div class="row">
+                        <div class="col-6">
+                          <div class="form-group">
+                            <label ngbPopover="Texte descriptif">Date d'engagement<b class="text-danger"> *</b></label>
+                            <div class="input-group">
+                              <input (keydown)="disableDate()" type="text" class="form-control form-control-rounded"
+                                ngbDatepicker #startDate="ngbDatepicker" placeholder="jj/mm/aaaa" name="startDate"
+                                formControlName="engagementDate" (dateSelect)="getEngagementDate($event)" />
+                              <div class="input-group-text cursor" (click)="startDate.toggle()">
+                                <i class="fa fa-calendar"></i>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-6">
+                          <div class="form-group">
+                            <label ngbPopover="Texte descriptif">Date de licenciement<b class="text-danger">
+                                *</b></label>
+                            <div class="input-group">
+                              <input (keydown)="disableDate()" type="text" class="form-control form-control-rounded"
+                                ngbDatepicker #returnDate="ngbDatepicker" placeholder="jj/mm/aaaa" name="startDate"
+                                formControlName="licenciementDate" (dateSelect)="getLicencimentDate($event)" />
+                              <div class="input-group-text cursor" (click)="returnDate.toggle()">
+                                <i class="fa fa-calendar"></i>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-4">
+                        </div>
+                        <div class="col-md-4 hidden-print" style="text-align: center;">
+                          <button type="button" class="btn btn-success btn-sm"
+                            [disabled]="!privateEnseignementForm.valid" (click)="process()">Calculer</button>
+                          <button type="button" class="btn btn-light btn-sm" (click)="cancel()">Annuler</button>
+                        </div>
+                        <div class="col-md-4">
+                        </div>
+                      </div>
+                      <div *ngIf="showResult">
+                        <div class="row mb-20">
+                          <div class="col-2"></div>
+                          <div class="col-md-8 mt-20" style="background: #f4f4f4;padding: 10px;">
+                            <div class="d-flex align-items-center border-bottom-dotted-dim pb-3 mb-3">
+                              <div class="flex-grow-1">
+                                <h6 class="m-0">MONTANT INDEMNITE DE LICENCIEMENT:</h6>
+                              </div>
+                              <div><span class="result">{{resultIndemnity}}</span> FCFA</div>
+                            </div>
+                          </div>
+                          <div class="col-2"></div>
+                        </div>
+                        <div class="row mb-20 hidden-print">
+                          <div class="col-2"></div>
+                          <div class="col-md-8 scan">
+                            <span class="cursor" (click)="printPage()"><i class="fas fa-print"></i> Imprimer le
+                              résultat</span>
+                          </div>
+                          <div class="col-2"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <!-- /.tab-pane -->
+                <div class="tab-pane" id="tab_2">
+                  <form [formGroup]="privateEnseignementMoreForm">
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-12">
+                          <label ngbPopover="Texte descriptif">Salaires<b class="text-danger"> *</b></label>
+                          <p class="info hidden-print">Veuillez insérer les valeurs des salaires.</p>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-3">
+                          <label></label>
+                          <input type="number" formControlName="sgmm1" min="0" class="form-control">
+                        </div>
+                        <div class="col-3">
+                          <label></label>
+                          <input type="number" formControlName="sgmm2" min="0" class="form-control">
+                        </div>
+                        <div class="col-3">
+                          <label></label>
+                          <input type="number" formControlName="sgmm3" min="0" class="form-control">
+                        </div>
+                        <div class="col-3">
+                          <label></label>
+                          <input type="number" formControlName="sgmm4" min="0" class="form-control">
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-3">
+                          <label></label>
+                          <input type="number" formControlName="sgmm5" min="0" class="form-control">
+                        </div>
+                        <div class="col-3">
+                          <label></label>
+                          <input type="number" formControlName="sgmm6" min="0" class="form-control">
+                        </div>
+                        <div class="col-3">
+                          <label></label>
+                          <input type="number" formControlName="sgmm7" min="0" class="form-control">
+                        </div>
+                        <div class="col-3">
+                          <label></label>
+                          <input type="number" formControlName="sgmm8" min="0" class="form-control">
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-3">
+                          <label></label>
+                          <input type="number" formControlName="sgmm9" min="0" class="form-control">
+                        </div>
+                        <div class="col-3">
+                          <label></label>
+                          <input type="number" formControlName="sgmm10" min="0" class="form-control">
+                        </div>
+                        <div class="col-3">
+                          <label></label>
+                          <input type="number" formControlName="sgmm11" min="0" class="form-control">
+                        </div>
+                        <div class="col-3">
+                          <label></label>
+                          <input type="number" formControlName="sgmm12" min="0" class="form-control">
+                        </div>
+                      </div>
+                      <br>
+                      <div class="row">
+                        <div class="col-6">
+                          <div class="form-group">
+                            <label ngbPopover="Texte descriptif">Date d'engagement<b class="text-danger"> *</b></label>
+                            <div class="input-group">
+                              <input (keydown)="disableDate()" type="text" class="form-control form-control-rounded"
+                                ngbDatepicker #startDateMore="ngbDatepicker" placeholder="jj/mm/aaaa"
+                                name="startDateMore" formControlName="engagementDateMore"
+                                (dateSelect)="getEngagementDateMore($event)" />
+                              <div class="input-group-text cursor" (click)="startDateMore.toggle()">
+                                <i class="fa fa-calendar"></i>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-6">
+                          <div class="form-group">
+                            <label ngbPopover="Texte descriptif">Date de licenciement<b class="text-danger">
+                                *</b></label>
+                            <div class="input-group">
+                              <input (keydown)="disableDate()" type="text" class="form-control form-control-rounded"
+                                ngbDatepicker #returnDateMore="ngbDatepicker" placeholder="jj/mm/aaaa"
+                                name="startDateMore" formControlName="licenciementDateMore"
+                                (dateSelect)="getLicencimentDateMore($event)" />
+                              <div class="input-group-text cursor" (click)="returnDateMore.toggle()">
+                                <i class="fa fa-calendar"></i>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-4">
+                        </div>
+                        <div class="col-md-4 hidden-print" style="text-align: center;">
+                          <button type="button" class="btn btn-success btn-sm"
+                            [disabled]="!privateEnseignementMoreForm.valid" (click)="processMore()">Calculer</button>
+                          <button type="button" class="btn btn-light btn-sm" (click)="cancelMore()">Annuler</button>
+                        </div>
+                        <div class="col-md-4">
+                        </div>
+                      </div>
+                      <div *ngIf="showResultMore">
+                        <div class="row mb-20">
+                          <div class="col-2"></div>
+                          <div class="col-md-8 mt-20" style="background: #f4f4f4;padding: 10px;">
+                            <div class="d-flex align-items-center border-bottom-dotted-dim pb-3 mb-3">
+                              <div class="flex-grow-1">
+                                <h6 class="m-0">MONTANT INDEMNITE DE LICENCIEMENT:</h6>
+                              </div>
+                              <div><span class="result">{{resultIndemnityMore}}</span> FCFA</div>
+                            </div>
+                          </div>
+                          <div class="col-2"></div>
+                        </div>
+                        <div class="row mb-20 hidden-print">
+                          <div class="col-2"></div>
+                          <div class="col-md-8 scan">
+                            <span class="cursor" (click)="printPage()"><i class="fas fa-print"></i> Imprimer le
+                              résultat</span>
+                          </div>
+                          <div class="col-2"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <!-- /.tab-pane -->
+              </div>
+              <!-- /.tab-content -->
+            </div><!-- /.card-body -->
+          </div>
+          <div class="hidden-print alert alert-info alert-definition alert-dismissible fade show" role="alert">
+            <span>* Texte explication du comment le calcule a été effectué.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

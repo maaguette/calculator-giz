@@ -1,0 +1,92 @@
+<div class="content-wrapper">
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Calcul de la prime d'ancienneté</h1>
+        </div>
+        <div class="col-sm-6 hidden-print">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a routerLink="/">Acceuil</a></li>
+            <li class="breadcrumb-item active">Ancienneté</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title"></h3>
+            </div>
+            <div class="card-body">
+              <form [formGroup]="olderForm">
+                <div class="row">
+                  <ngb-alert [dismissible]="true" *ngIf="showMessage">
+                    <strong>Attention!</strong> {{message}}
+                  </ngb-alert>
+                  <div class="col-12">
+                    <label ngbPopover="Texte descriptif">Salaire de base<b class="text-danger"> *</b></label>
+                    <input type="number" min="0" formControlName="baseSolde" class="form-control">
+                  </div>
+                </div>
+                <br>
+                <div class="row">
+                  <div class="col-6">
+                    <div class="form-group">
+                      <label ngbPopover="Texte descriptif">Heures supplémentaires<b class="text-danger"> *</b></label>
+                      <input type="number" min="0" formControlName="supHour" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <label ngbPopover="Texte descriptif">Ancienneté<b class="text-danger"> *</b></label>
+                    <input type="number" min="0" formControlName="older" class="form-control">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4">
+                  </div>
+                  <div class="col-md-4 hidden-print" style="text-align: center;">
+                    <button type="button" class="btn btn-success btn-sm" [disabled]="!olderForm.valid"
+                      (click)="process()">Calculer</button>
+                    <button type="button" class="btn btn-light btn-sm" (click)="cancel()">Annuler</button>
+                  </div>
+                  <div class="col-md-4">
+                  </div>
+                </div>
+                <div *ngIf="showResult">
+                  <div class="row mb-20">
+                    <div class="col-2"></div>
+                    <div class="col-md-8 mt-20" style="background: #f4f4f4;padding: 10px;">
+                      <div class="d-flex align-items-center border-bottom-dotted-dim pb-3 mb-3">
+                        <div class="flex-grow-1">
+                          <h6 class="m-0">MONTANT PRIME D'ANCIENNETE:</h6>
+                        </div>
+                        <div><span class="result">{{olderIndemnity }}</span> FCFA</div>
+                      </div>
+                    </div>
+                    <div class="col-2"></div>
+                  </div>
+                  <div class="row mb-20 hidden-print">
+                    <div class="col-2"></div>
+                    <div class="col-md-8 scan">
+                      <span class="cursor" (click)="printPage()"><i class="fas fa-print"></i> Imprimer le
+                        résultat</span>
+                    </div>
+                    <div class="col-2"></div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="hidden-print alert alert-info alert-definition alert-dismissible fade show" role="alert">
+            <span>* Texte explication du comment le calcul a été effectué.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

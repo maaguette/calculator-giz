@@ -1,0 +1,12 @@
+.info {
+  font-size: 14px;
+  color: #7a7a7a;
+}
+.scan span {
+  text-align: right;
+}
+@media print {
+  .hidden-print {
+    display: none !important;
+  }
+}

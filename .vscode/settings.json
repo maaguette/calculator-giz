@@ -1,0 +1,16 @@
+{
+  "cSpell.words": ["locutus", "notif"],
+  "eslint.alwaysShowStatus": true,
+  "eslint.packageManager": "yarn",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#3E281F",
+    "titleBar.activeBackground": "#56392B",
+    "titleBar.activeForeground": "#FCF9F8"
+  }
+}

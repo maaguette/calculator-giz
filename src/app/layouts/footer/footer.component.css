@@ -1,0 +1,13 @@
+footer {
+  margin-bottom: 20px;
+}
+
+a {
+  color: #28a745 !important;
+}
+
+@media print {
+  .hidden-print {
+    display: none !important;
+  }
+}

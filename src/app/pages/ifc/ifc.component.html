@@ -1,0 +1,108 @@
+<div class="content-wrapper">
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Calcul indemnités de fin de CDD</h1>
+        </div>
+        <div class="col-sm-6 hidden-print">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a routerLink="/">Acceuil</a></li>
+            <li class="breadcrumb-item active">Indemnités de fin de CDD</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title"></h3>
+            </div>
+            <form [formGroup]="ifcForm">
+              <div class="card-body">
+                <div class="row">
+                  <ngb-alert [dismissible]="true" *ngIf="showMessage">
+                    <strong>Attention!</strong> {{ message }}
+                  </ngb-alert>
+                  <div class="col-12">
+                    <label ngbPopover="Texte descriptif">Salaire brut<b class="text-danger"> *</b></label>
+                    <input type="number" formControlName="solde" min="0" class="form-control">
+                  </div>
+                </div>
+                <br>
+                <div class="row">
+                  <div class="col-6">
+                    <div class="form-group">
+                      <label ngbPopover="Texte descriptif">Date d'engagement<b class="text-danger"> *</b></label>
+                      <div class="input-group">
+                        <input (keydown)="disableDate()" type="text" class="form-control form-control-rounded"
+                          ngbDatepicker #startDate="ngbDatepicker" placeholder="jj/mm/aaaa" name="startDate"
+                          formControlName="engagementDate" (dateSelect)="getEngagementDate($event)" />
+                        <div class="input-group-text cursor" (click)="startDate.toggle()">
+                          <i class="fa fa-calendar"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="form-group">
+                      <label ngbPopover="Texte descriptif">Date de fin de contrat<b class="text-danger"> *</b></label>
+                      <div class="input-group">
+                        <input (keydown)="disableDate()" type="text" class="form-control form-control-rounded"
+                          ngbDatepicker #returnDate="ngbDatepicker" placeholder="jj/mm/aaaa" name="startDate"
+                          formControlName="endContratDate" (dateSelect)="getEndContratDate($event)" />
+                        <div class="input-group-text cursor" (click)="returnDate.toggle()">
+                          <i class="fa fa-calendar"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4">
+                  </div>
+                  <div class="col-md-4 hidden-print" style="text-align: center;">
+                    <button type="button" class="btn btn-success btn-sm" [disabled]="!ifcForm.valid"
+                      (click)="process()">Calculer</button>
+                    <button type="button" class="btn btn-light btn-sm" (click)="cancel()">Annuler</button>
+                  </div>
+                  <div class="col-md-4">
+                  </div>
+                </div>
+                <div *ngIf="showResult">
+                  <div class="row mb-20">
+                    <div class="col-2"></div>
+                    <div class="col-md-8 mt-20" style="background: #f4f4f4;padding: 10px;">
+                      <div class="d-flex align-items-center border-bottom-dotted-dim pb-3 mb-3">
+                        <div class="flex-grow-1">
+                          <h6 class="m-0">MONTANT INDEMNITE DE FIN DE CONTRAT:</h6>
+                        </div>
+                        <div><span class="result">{{resultIndemnity }}</span> FCFA</div>
+                      </div>
+                    </div>
+                    <div class="col-2"></div>
+                  </div>
+                  <div class="row mb-20 hidden-print">
+                    <div class="col-2"></div>
+                    <div class="col-md-8 scan">
+                      <span class="cursor" (click)="printPage()"><i class="fas fa-print"></i> Imprimer le
+                        résultat</span>
+                    </div>
+                    <div class="col-2"></div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="hidden-print alert alert-info alert-definition alert-dismissible fade show" role="alert">
+            <span>* Texte explication du comment le calcule a été effectué.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,154 @@
+<div class="content-wrapper">
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Calcul des indemnités de congé</h1>
+        </div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a routerLink="/">Acceuil</a></li>
+            <li class="breadcrumb-item active">Congé femme</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+  <section class="content">
+    <div class="container-fluid">
+      <form [formGroup]="formCongeWomen">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Femme</h3>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <ngb-alert [dismissible]="true" *ngIf="showMessage">
+                    <strong>Attention!</strong> {{ message }}
+                  </ngb-alert>
+                  <div class="col-6">
+                    <div class="form-group">
+                      <label ngbPopover="Texte descriptif">Date de départ en congé<b class="text-danger">
+                          *</b></label>
+                      <div class="input-group">
+                        <input (keydown)="disableDate()" type="text" class="form-control form-control-rounded"
+                          ngbDatepicker #startDate="ngbDatepicker" placeholder="jj/mm/aaaa" name="startDate"
+                          formControlName="dateDepart" (dateSelect)="getStartDate($event)" />
+                        <div class="input-group-text cursor" (click)="startDate.toggle()">
+                          <i class="fa fa-calendar"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="form-group">
+                      <label ngbPopover="Texte descriptif">Date de retour dernier congé ou date
+                        d'engagement<b class="text-danger">
+                          *</b></label>
+                      <div class="input-group">
+                        <input (keydown)="disableDate()" type="text" class="form-control form-control-rounded"
+                          ngbDatepicker #returnDate="ngbDatepicker" placeholder="jj/mm/aaaa" name="startDate"
+                          formControlName="returnDate" (dateSelect)="getReturnDate($event)" />
+                        <div class="input-group-text cursor" (click)="returnDate.toggle()">
+                          <i class="fa fa-calendar"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <label ngbPopover="Texte descriptif">Salaire période de référence<b class="text-danger">
+                        *</b></label>
+                    <input type="number" min="0" formControlName="solde" class="form-control" />
+                  </div>
+                  <div class="col-6">
+                    <div class="form-group">
+                      <label ngbPopover="Texte descriptif">Ancienneté <b class="text-danger"> *</b></label>
+                      <select formControlName="older" class="form-control select2" style="width: 100%">
+                        <option selected="selected" value="-10">-10</option>
+                        <option value="+10">+10</option>
+                        <option value="+15">+15</option>
+                        <option value="+20">+20</option>
+                        <option value="+25">+25</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <label ngbPopover="Texte descriptif">Age<b class="text-danger">
+                        *</b></label>
+                    <select formControlName="age" class="form-control select2" style="width: 100%">
+                      <option selected="selected" value="-21">-21</option>
+                      <option value="+21">+21</option>
+                    </select>
+                  </div>
+                  <div class="col-6">
+                    <div class="form-group">
+                      <label ngbPopover="Texte descriptif">Nombre d'enfant <b class="text-danger"> *</b></label>
+                      <input type="number" min="0" formControlName="children" class="form-control" />
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="form-group clearfix">
+                      <div class="d-inline mr-20">
+                        <input type="checkbox" value="expat" (change)="onCheckExpat($event)" />&nbsp;&nbsp;
+                        <label for="checkboxSuccess3" ngbPopover="Texte descriptif"> Expatriée </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4"></div>
+                  <div class="col-md-4" style="text-align: center">
+                    <button type="button" [disabled]="!formCongeWomen.valid" (click)="process()"
+                      class="btn btn-success btn-sm">
+                      Calculer</button>&nbsp;&nbsp;&nbsp;
+                    <button type="button" class="btn btn-light btn-sm" (click)="cancel()">
+                      Annuler
+                    </button>
+                  </div>
+                  <div class="col-md-4"></div>
+                </div>
+                <div class="row mb-20" *ngIf="showResult">
+                  <div class="col-2"></div>
+                  <div class="col-md-8 mt-20" style="background: #f4f4f4; padding: 10px">
+                    <div class="d-flex align-items-center border-bottom-dotted-dim pb-3 mb-3">
+                      <div class="flex-grow-1">
+                        <h6 class="m-0">CONGE PRINCIPAL:</h6>
+                        <p class="m-0 text-small text-bold">
+                          {{ numberDayPrimaryConge }} jours(s)
+                        </p>
+                      </div>
+                      <div>
+                        <span class="result">{{ primaryIndemnity }}</span> FCFA
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-center border-bottom-dotted-dim pb-3 mb-3">
+                      <div class="flex-grow-1">
+                        <h6 class="m-0">CONGE SUPPLEMENTAIRE:</h6>
+                        <p class="m-0 text-small text-bold">
+                          {{ numberCongeSup }} jours(s)
+                        </p>
+                      </div>
+                      <div>
+                        <span class="result">{{ secondaryIndemnity }}</span>
+                        FCFA
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-2"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+</div>
