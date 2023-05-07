@@ -77,26 +77,28 @@ export class RappelDifferentielComponent implements OnInit {
     let compareDate2 = this.utilsService.formatDateSeparateAMJ(this.ngPickerEndDate);
     if (compareDate1 < compareDate2) {
       let result = this.dateDiff(compareDate1, compareDate2);
+      console.log(result)
       let numberMonth = result.month;
-      let numberYear = result.year;
-      let numberDay = result.day;
-      this.endDate = new Date(this.utilsService.formatDateSeparate(this.ngPickerEndDate));
-      let numberDayStartingDate = this.addDays(this.endDate, numberDay);
-      var end = new Date(this.formatDate(this.endDate));
-      var loop = new Date(numberDayStartingDate);
-      let workingDay = 0;
-      if (end.getDay() == 0) {
-        end.setDate(end.getDate() - 1)
-      }
-      while (loop <= end) {
-        var newDate = loop.setDate(loop.getDate() + 1);
-        loop = new Date(newDate);
-        if (loop.getDay() != 0) {
-          workingDay = workingDay + 1;
-        }
-      }
-      numberMonth = (numberYear * 12) + numberMonth;
-      this.resultIndemnity = Math.round(((due - collect) * numberMonth) + ((workingDay * (due - collect)) / 26));
+      //let numberYear = result.year;
+      //let numberDay = result.day;
+      /* this.endDate = new Date(this.utilsService.formatDateSeparate(this.ngPickerEndDate));
+       let numberDayStartingDate = this.addDays(this.endDate, numberDay);
+       var end = new Date(this.formatDate(this.endDate));
+       var loop = new Date(numberDayStartingDate);
+       let workingDay = 0;
+       if (end.getDay() == 0) {
+         end.setDate(end.getDate() - 1)
+       }
+       while (loop <= end) {
+         var newDate = loop.setDate(loop.getDate() + 1);
+         loop = new Date(newDate);
+         if (loop.getDay() != 0) {
+           workingDay = workingDay + 1;
+         }
+       }
+       numberMonth = (numberYear * 12) + numberMonth;
+       this.resultIndemnity = Math.round(((due - collect) * numberMonth) + ((workingDay * (due - collect)) / 26));*/
+      this.resultIndemnity = Math.round(((due - collect) * numberMonth));
       this.resultIndemnity = this.formatCurrencyNew(this.resultIndemnity);
       this.showResult = true;
     } else {
