@@ -1,6 +1,6 @@
 {
   "name": "giz-calculator",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "main": "app.js",
   "scripts": {
     "ng": "ng",
@@ -9,11 +9,12 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "dist": "electron-builder"
+    "dist": "electron-builder",
+    "electron": "ng build --prod && electron ."
   },
   "build": {
     "appId": "com.automatiiz.calculatorindemnity",
-    "productName": "Calculateur indemnité",
+    "productName": "Calculatrice des indemnités",
     "win": {
       "target": "nsis"
     },
