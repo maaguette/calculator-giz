@@ -25,11 +25,11 @@ let mainWindow;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    icon: path.join(`file://${__dirname}/dist/logo`),
+    icon: path.join(__dirname, "./logo.ico"),
     width: 800,
     height: 600,
     webPreferences: {
-      preload: path.join(`file://${__dirname}/dist/preload.js`),
+      preload: path.join(__dirname, "./preload.js"),
       nodeIntegration: false,
       enableRemoteModule: false,
     },
@@ -46,7 +46,7 @@ function createWindow() {
 
   mainWindow.loadURL(
     url.format({
-      pathname: path.join(`file://${__dirname}/dist/index.html`),
+      pathname: path.join(__dirname, `/dist/index.html`),
       protocol: "file:",
       slashes: true,
     })

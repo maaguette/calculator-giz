@@ -2,6 +2,7 @@
   "name": "giz-calculator",
   "version": "0.0.1",
   "main": "app.js",
+  "description": "Logiciel permettant d'autaumatiser le calcul des indemnités des conventions.",
   "scripts": {
     "ng": "ng",
     "start-electron": "ng build --base-href ./ && electron .",
@@ -9,17 +10,17 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "dist": "electron-builder",
-    "electron": "ng build --prod && electron ."
+    "dist": "electron-builder"
   },
   "build": {
     "appId": "com.automatiiz.calculatorindemnity",
     "productName": "Calculatrice des indemnités",
     "win": {
-      "target": "nsis"
+      "target": "nsis",
+      "icon": "logo.ico"
     },
     "directories": {
-      "output": "dist"
+      "output": "dist/release"
     }
   },
   "repository": "https://github.com/maaguette/calculator-giz",
