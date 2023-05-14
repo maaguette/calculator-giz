@@ -6,22 +6,22 @@ const { autoUpdater, AppUpdater } = require("electron-updater");
 autoUpdater.autoDownload = false;
 autoUpdater.autoInstallOnAppQuit = true;
 let curWindow;
+let mainWindow;
 const template = [
-  {
-    label: 'Actualiser',
-    accelerator: 'CmdOrCtrl+R',
-    click: () => {
-      mainWindow.reload();
-    }
-  },
-  {
-    label: 'Documentation',
-  },
+  /*  {
+     label: 'Actualiser',
+     accelerator: 'CmdOrCtrl+R',
+     click: () => {
+       mainWindow.webContents.reloadIgnoringCache()
+     }
+   },
+   {
+     label: 'Documentation',
+   }, */
 ]
 
 const menu = Menu.buildFromTemplate(template)
 Menu.setApplicationMenu(Menu.buildFromTemplate(template))
-let mainWindow;
 
 function createWindow() {
   mainWindow = new BrowserWindow({

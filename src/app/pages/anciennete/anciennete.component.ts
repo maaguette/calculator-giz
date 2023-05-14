@@ -45,7 +45,6 @@ export class AncienneteComponent implements OnInit {
         this.showResult = true;
       }
     }
-
     this.olderIndemnity = this.formatCurrencyNew(this.olderIndemnity);
   }
 
