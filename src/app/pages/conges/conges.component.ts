@@ -156,8 +156,6 @@ export class CongesComponent implements OnInit {
           break;
         case '+25':
           this.numberDayPrimaryConge = this.numberMonthPrimaryConge * 5;
-          console.log('hhhh', this.numberDayPrimaryConge);
-
           this.numberCongeSup = 7;
           this.primaryIndemnity = Math.round(this.solde / 12);
           this.secondaryIndemnity = Math.round((this.primaryIndemnity / (this.numberMonthPrimaryConge * 5))) * 7

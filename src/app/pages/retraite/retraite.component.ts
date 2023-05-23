@@ -96,6 +96,7 @@ export class RetraiteComponent implements OnInit {
 
   process() {
     this.showResult = false;
+    this.showMessage = false;
     let solde = this.retraiteForm.get('sgmm')?.value;
     let totalMonth = Math.trunc(this.monthDiff(this.utilService.formatDate(this.ngPickerRetraiteDate), this.utilService.formatDate(this.ngPickerEngagementDate)));
     this.numberYear = Math.trunc(totalMonth / 12);

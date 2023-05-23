@@ -75,7 +75,7 @@
                         </div>
                         <div class="col-md-4 hidden-print" style="text-align: center;">
                           <button type="button" class="btn btn-success btn-sm"
-                            [disabled]="!privateEnseignementForm.valid" (click)="process()">Calculer</button>
+                            [disabled]="!privateEnseignementForm.valid" (click)="processSimple()">Calculer</button>
                           <button type="button" class="btn btn-light btn-sm" (click)="cancel()">Annuler</button>
                         </div>
                         <div class="col-md-4">
@@ -85,6 +85,19 @@
                         <div class="row mb-20">
                           <div class="col-2"></div>
                           <div class="col-md-8 mt-20" style="background: #f4f4f4;padding: 10px;">
+                            <div class="d-flex align-items-center border-bottom-dotted-dim pb-3 mb-3">
+                              <div class="flex-grow-1">
+                                <div>
+                                  {{numberYear}} an(s)
+                                </div>
+                                <div>
+                                  {{numberMonth}} mois(s)
+                                </div>
+                                <div>
+                                  {{numberDay}} jours(s)
+                                </div>
+                              </div>
+                            </div>
                             <div class="d-flex align-items-center border-bottom-dotted-dim pb-3 mb-3">
                               <div class="flex-grow-1">
                                 <h6 class="m-0">MONTANT INDEMNITE DE LICENCIEMENT:</h6>

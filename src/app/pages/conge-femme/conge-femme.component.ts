@@ -218,8 +218,6 @@ export class CongeFemmeComponent implements OnInit {
       this.showResult = true
     }
     else if (this.numberDay < 28 && !this.expat && age == '+21' && older == '+10' && children >= 4) {
-      console.log('kndgkjengkjengkej');
-
       this.numberDayPrimaryConge = this.numberMonthPrimaryConge * 2;
       this.numberCongeSup = ((children - 3) * 2) + 4;
       this.primaryIndemnity = Math.round(solde / 12);
