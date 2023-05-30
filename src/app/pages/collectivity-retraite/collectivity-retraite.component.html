@@ -7,7 +7,7 @@
         </div>
         <div class="col-sm-6 hidden-print">
           <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a routerLink="/">Acceuil</a></li>
+            <li class="breadcrumb-item"><a routerLink="/">Accueil</a></li>
             <li class="breadcrumb-item active">Indemnités de retraite</li>
           </ol>
         </div>
@@ -36,7 +36,7 @@
                           <strong>Attention!</strong> {{ message }}
                         </ngb-alert>
                         <div class="col-12">
-                          <label ngbPopover="Texte descriptif">SGMM<b class="text-danger"> *</b></label>
+                          <label ngbPopover="Salaire global moyen mensuel">SGMM<b class="text-danger"> *</b></label>
                           <input type="number" formControlName="sgmm" min="0" class="form-control">
                         </div>
                       </div>
@@ -75,7 +75,7 @@
                         </div>
                         <div class="col-md-4 hidden-print" style="text-align: center;">
                           <button type="button" class="btn btn-success btn-sm"
-                            [disabled]="!collectivityretraiteForm.valid" (click)="process()">Calculer</button>
+                            [disabled]="!collectivityretraiteForm.valid" (click)="processSimple()">Calculer</button>
                           <button type="button" class="btn btn-light btn-sm" (click)="cancel()">Annuler</button>
                         </div>
                         <div class="col-md-4">

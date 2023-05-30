@@ -2,7 +2,8 @@ import { formatCurrency } from '@angular/common';
 import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UtilsService } from '../utils.service';
-
+import 'moment-precise-range-plugin';
+import moment from 'moment/moment';
 @Component({
   selector: 'app-collectivity-retraite',
   templateUrl: './collectivity-retraite.component.html',
@@ -48,6 +49,8 @@ export class CollectivityRetraiteComponent implements OnInit {
   ngPickerEngagementDateMore: any;
   ngPickerLicenciementDate: any;
   ngPickerLicenciementDateMore: any;
+  intervalOlder: any;
+  result: any;
 
   constructor(private fb: FormBuilder, private utilService: UtilsService, @Inject(LOCALE_ID) public locale: string) { }
 
@@ -99,15 +102,24 @@ export class CollectivityRetraiteComponent implements OnInit {
     this.licenciementDateMore = new Date(this.utilService.formatCompareDate(value));
   }
 
-  process() {
-    this.showMessage = false;
+  processSimple() {
     this.showResult = false;
     let solde = this.collectivityretraiteForm.get('sgmm')?.value;
-    this.numberYear = this.yearDiff(this.engagementDate, this.licenciementDate);
-    let totalMonth = Math.trunc(this.monthDiff(this.utilService.formatDate(this.ngPickerLicenciementDate), this.utilService.formatDate(this.ngPickerEngagementDate)));
-    this.numberMonth = totalMonth - (this.numberYear * 12);
-    let totalDay = Math.trunc(this.dayDiff(this.ngPickerLicenciementDate, this.ngPickerEngagementDate));
-    this.numberDay = Math.round(totalDay - (this.numberYear * 365.2425) - (this.numberMonth * 30.41666666667));
+    this.resultIndemnity = this.process(solde, this.ngPickerEngagementDate, this.ngPickerLicenciementDate);
+    this.showResult = true;
+  }
+
+  process(solde: any, engagementDate: any, licenciementDate: any) {
+    this.showMessage = false;
+
+    let differenceOlder = moment.preciseDiff(moment(this.utilService.formatDateSeparateAMJ(engagementDate)), moment(this.utilService.formatDateSeparateAMJ(licenciementDate)));
+
+    let date = this.utilService.formatePreciseDiff(differenceOlder);
+    this.numberYear = date.year;
+    this.numberMonth = date.month;
+    this.numberDay = date.day;
+    this.intervalOlder = date.intervalOlder;
+
     if (this.licenciementDate < this.engagementDate) {
       this.message = "La date d'engagement ne peut pas être supérieure à la date de licenciement."
       this.showMessage = true;
@@ -117,19 +129,20 @@ export class CollectivityRetraiteComponent implements OnInit {
       this.message = "Il faut 1 an d'ancienneté au moins pour prétendre à une indémnité."
       this.showMessage = true;
       return
-    } else {
-      if (this.numberYear <= 5) {
-        this.resultIndemnity = Math.round((this.numberYear * solde * 0.2) + ((this.numberMonth / 12) * solde * 0.2) + ((this.numberDay / 360) * solde * 0.2));
-      }
-      if (this.numberYear > 5 && this.numberYear <= 10) {
-        this.resultIndemnity = Math.round((solde * 5 * 0.2) + (solde * (this.numberYear - 5) * 0.25) + (solde * (this.numberMonth / 12) * 0.25) + (solde * (this.numberDay / 360) * 0.25));
-      }
-      if (this.numberYear > 10) {
-        this.resultIndemnity = Math.round((solde * 5 * 0.2) + (solde * 5 * 0.25) + (solde * (this.numberYear - 10) * 0.3) + (solde * (this.numberMonth / 12) * 0.3) + (solde * (this.numberDay / 360) * 0.3));
-      }
-      this.resultIndemnity = this.formatCurrencyNew(this.resultIndemnity);
-      this.showResult = true;
     }
+    else {
+      if (this.intervalOlder <= 5) {
+        this.result = Math.round((this.numberYear * solde * 0.2) + ((this.numberMonth / 12) * solde * 0.25) + ((this.numberDay / 360) * solde * 0.25));
+      }
+      if (this.intervalOlder > 5 && this.intervalOlder <= 10) {
+        this.result = Math.round((solde * 5 * 0.2) + (solde * (this.numberYear - 5) * 0.25) + (solde * (this.numberMonth / 12) * 0.25) + (solde * (this.numberDay / 360) * 0.25));
+      }
+      if (this.intervalOlder > 10) {
+        this.result = Math.round((solde * 5 * 0.2) + (solde * 5 * 0.25) + (solde * (this.numberYear - 10) * 0.3) + (solde * (this.numberMonth / 12) * 0.3) + (solde * (this.numberDay / 360) * 0.3));
+      }
+    }
+    this.result = this.formatCurrencyNew(this.result);
+    return this.result;
   }
 
   processMore() {
@@ -148,43 +161,15 @@ export class CollectivityRetraiteComponent implements OnInit {
     let solde11 = this.collectivityretraiteFormMore.get('sgmm11')?.value;
     let solde12 = this.collectivityretraiteFormMore.get('sgmm12')?.value;
     if (solde1 == "" && solde2 == "" && solde3 == "" && solde4 == "" && solde5 == "" && solde6 == "" && solde7 == "" && solde8 == "" && solde9 == "" && solde10 == "" && solde11 == "" && solde12 == "") {
-      this.messageMore = "Veuillez insérer les valeurs des salaires avant calculer."
-      this.showMessageMore = true;
-    }
-    this.numberYearMore = this.yearDiff(this.engagementDateMore, this.licenciementDateMore);
-    let totalMonth = Math.trunc(this.monthDiff(this.utilService.formatDate(this.ngPickerLicenciementDateMore), this.utilService.formatDate(this.ngPickerEngagementDateMore)));
-    this.numberMonthMore = totalMonth - (this.numberYearMore * 12);
-    let totalDay = Math.trunc(this.dayDiffMore(this.ngPickerLicenciementDateMore, this.ngPickerLicenciementDateMore));
-    this.numberDayMore = Math.round(totalDay - (this.numberYearMore * 365.2425) - (this.numberMonthMore * 30.41666666667));
-    let totalSolde = (solde1 + solde2 + solde3 + solde4 + solde5 + solde6 + solde7 + solde8 + solde9 + solde10 + solde11 + solde12) / 12;
-
-    if (this.licenciementDateMore < this.engagementDateMore) {
-      this.message = "La date d'engagement ne peut pas être supérieure à la date de licenciement."
+      this.message = "Veuillez insérer les valeurs des salaires avant calculer."
       this.showMessage = true;
-      return
-    }
-    if (this.numberYearMore < 1) {
-      this.message = "Il faut 1 an d'ancienneté au moins pour prétendre à une indémnité."
-      this.showMessage = true;
-      return
     } else {
-      if (this.numberYearMore <= 5) {
-        this.resultIndemnityMore = Math.round(((this.numberYearMore * totalSolde * 0.2) + ((this.numberMonthMore / 12) * totalSolde * 0.2) + ((this.numberDayMore / 360) * totalSolde * 0.2)));
-        this.resultIndemnityMore = this.formatCurrencyNew(this.resultIndemnityMore);
-        this.showResultMore = true;
-        return
-      }
-      if (this.numberYearMore > 5 && this.numberYearMore <= 10) {
-        this.resultIndemnityMore = Math.round((totalSolde * 5 * 0.2) + (totalSolde * (this.numberYearMore - 5) * 0.25) + (totalSolde * (this.numberMonthMore / 12) * 0.25) + (totalSolde * (this.numberDayMore / 360) * 0.25)
-        );
-      }
-      if (this.numberYearMore > 10) {
-        this.resultIndemnityMore = Math.round((totalSolde * 5 * 0.2) + (totalSolde * 5 * 0.25) + (totalSolde * (this.numberYearMore - 10) * 0.3) + (totalSolde * (this.numberMonthMore / 12) * 0.3) + (totalSolde * (this.numberDayMore / 360) * 0.3)
-        );
-      }
-      this.resultIndemnityMore = this.formatCurrencyNew(this.resultIndemnityMore);
+      let totalSolde = (solde1 + solde2 + solde3 + solde4 + solde5 + solde6 + solde7 + solde8 + solde9 + solde10 + solde11 + solde12) / 12;
+
+      this.resultIndemnityMore = this.process(totalSolde, this.ngPickerEngagementDateMore, this.ngPickerLicenciementDateMore)
       this.showResultMore = true;
     }
+
   }
 
   cancelMore() {
@@ -197,45 +182,10 @@ export class CollectivityRetraiteComponent implements OnInit {
     this.showResult = false;
   }
 
-
-  monthDiff(d1: any, d2: any) {
-    let a = new Date(d1);
-    let b = new Date(d2);
-    var months;
-    months = (a.getFullYear() - b.getFullYear()) * 12;
-    months -= b.getMonth();
-    months += a.getMonth();
-    return months <= 0 ? 0 : months;
-  }
-
-  dayDiff(date2: any, date1: any) {
-    date1 = new Date(this.utilService.formatCompareDate(this.ngPickerEngagementDate));
-    date2 = new Date(this.utilService.formatCompareDate(this.ngPickerLicenciementDate));
-    const _MS_PER_DAY = 1000 * 60 * 60 * 24;
-    const utc1 = Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate());
-    const utc2 = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate());
-    return Math.floor((utc2 - utc1) / _MS_PER_DAY);
-  }
-
   formatCurrencyNew(value: any) {
     let amont = formatCurrency(value, this.locale, 'XOF', '', '4.0-0');
     amont = amont.replace(/\,/g, ' ');
     return amont.replace(/[A-Z]+/g, "");
-  }
-
-  dayDiffMore(date2: any, date1: any) {
-    date1 = new Date(this.utilService.formatCompareDate(this.ngPickerEngagementDateMore));
-    date2 = new Date(this.utilService.formatCompareDate(this.ngPickerLicenciementDateMore));
-    const _MS_PER_DAY = 1000 * 60 * 60 * 24;
-    const utc1 = Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate());
-    const utc2 = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate());
-    return Math.floor((utc2 - utc1) / _MS_PER_DAY);
-  }
-
-  yearDiff(dt2: any, dt1: any) {
-    var diff = (dt2.getTime() - dt1.getTime()) / 1000;
-    diff /= (60 * 60 * 24);
-    return Math.abs(Math.round(diff / 365.25));
   }
 
   printPage() {

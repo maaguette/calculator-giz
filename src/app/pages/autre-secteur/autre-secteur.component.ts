@@ -117,9 +117,15 @@ export class AutreSecteurComponent implements OnInit {
     let solde11 = this.otherSectorMoreForm.get('sgmm11')?.value;
     let solde12 = this.otherSectorMoreForm.get('sgmm12')?.value;
 
-    let totalSolde = (solde1 + solde2 + solde3 + solde4 + solde5 + solde6 + solde7 + solde8 + solde9 + solde10 + solde11 + solde12) / 12;
-    this.resultIndemnity = this.process(totalSolde, this.ngPickerEngagementDate, this.ngPickerLicenciementDate);
-    this.showResult = true;
+    if (solde1 == "" && solde2 == "" && solde3 == "" && solde4 == "" && solde5 == "" && solde6 == "" && solde7 == "" && solde8 == "" && solde9 == "" && solde10 == "" && solde11 == "" && solde12 == "") {
+      this.message = "Veuillez insérer les valeurs des salaires avant calculer."
+      this.showMessage = true;
+    } else {
+      let totalSolde = (solde1 + solde2 + solde3 + solde4 + solde5 + solde6 + solde7 + solde8 + solde9 + solde10 + solde11 + solde12) / 12;
+
+      this.resultIndemnityMore = this.process(totalSolde, this.ngPickerEngagementDateMore, this.licenciementDateMore)
+      this.showResultMore = true;
+    }
   }
   cancelMore() {
     this.otherSectorMoreForm.reset();

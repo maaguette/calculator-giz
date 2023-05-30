@@ -1,6 +1,6 @@
 {
   "name": "giz-calculator",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "app.js",
   "description": "Logiciel permettant d'automatiser le calcul des indemnités des conventions.",
   "scripts": {

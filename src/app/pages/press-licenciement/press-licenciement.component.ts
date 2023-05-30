@@ -181,10 +181,15 @@ export class PressLicenciementComponent implements OnInit {
     let solde10 = this.pressLicenciemenFormMore.get('sgmm10')?.value;
     let solde11 = this.pressLicenciemenFormMore.get('sgmm11')?.value;
     let solde12 = this.pressLicenciemenFormMore.get('sgmm12')?.value;
-    let totalSolde = (solde1 + solde2 + solde3 + solde4 + solde5 + solde6 + solde7 + solde8 + solde9 + solde10 + solde11 + solde12) / 12;
+    if (solde1 == "" && solde2 == "" && solde3 == "" && solde4 == "" && solde5 == "" && solde6 == "" && solde7 == "" && solde8 == "" && solde9 == "" && solde10 == "" && solde11 == "" && solde12 == "") {
+      this.message = "Veuillez insérer les valeurs des salaires avant calculer."
+      this.showMessage = true;
+    } else {
+      let totalSolde = (solde1 + solde2 + solde3 + solde4 + solde5 + solde6 + solde7 + solde8 + solde9 + solde10 + solde11 + solde12) / 12;
 
-    this.resultIndemnityMore = this.process(totalSolde, this.ngPickerEngagementDateMore, this.ngPickerLicenciementDateMore)
-    this.showResultMore = true;
+      this.resultIndemnityMore = this.process(totalSolde, this.ngPickerEngagementDateMore, this.licenciementDateMore)
+      this.showResultMore = true;
+    }
   }
 
   cancelMore() {
